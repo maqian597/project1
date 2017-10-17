@@ -1,0 +1,154 @@
+package db.sql;
+
+import java.util.List;
+import java.util.Set;
+
+import db.DBConnection;
+import entity.Item;
+import external.ExternalAPI;
+import external.ExternalAPIFactory;
+
+//need import sql.*;
+import java.sql.*;
+
+public class MySQLConnection implements DBConnection{
+
+	//first constructor
+	private Connection conn;
+	
+	public MySQLConnection() {
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			conn = DriverManager.getConnection(MySQLDBUtil.URL);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		if (conn != null) {
+			try {
+				conn.close();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+
+	}
+
+	@Override
+	public void setFavoriteItems(String userId, List<String> itemIds) {
+		// TODO Auto-generated method stub
+		if (conn == null) {
+			return;
+		}
+		String query = "INSERT INTO history (user_id, item_id) VALUES (?, ?)";
+		try {
+			PreparedStatement statement = conn.prepareStatement(query);
+			for (String itemId : itemIds) {
+				statement.setString(1, userId);
+				statement.setString(2, itemId);
+				statement.execute();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void unsetFavoriteItems(String userId, List<String> itemIds) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Set<String> getFavoriteItemIds(String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<Item> getFavoriteItems(String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<String> getCategories(String itemId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Item> searchItems(String userId, double lat, double lon, String term) {
+		// TODO Auto-generated method stub
+		//return null;
+		// Connect to external API
+		ExternalAPI api = ExternalAPIFactory.getExternalAPI(); // moved here
+		List<Item> items = api.search(lat, lon, term);
+		for (Item item : items) {
+			// Save the item into our own db.
+			saveItem(item);
+		}
+		return items;
+
+	}
+
+	@Override
+	public void saveItem(Item item) {
+		// TODO Auto-generated method stub
+		if (conn == null) {
+			return;
+		}
+		try {
+			// First, insert into items table
+			String sql = "INSERT IGNORE INTO items VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, item.getItemId());
+			statement.setString(2, item.getName());
+			statement.setString(3, item.getCity());
+			statement.setString(4, item.getState());
+			statement.setString(5, item.getCountry());
+			statement.setString(6, item.getZipcode());
+			statement.setDouble(7, item.getRating());
+			statement.setString(8, item.getAddress());
+			statement.setDouble(9, item.getLatitude());
+			statement.setDouble(10, item.getLongitude());
+			statement.setString(11, item.getDescription());
+			statement.setString(12, item.getSnippet());
+			statement.setString(13, item.getSnippetUrl());
+			statement.setString(14, item.getImageUrl());
+			statement.setString(15, item.getUrl());
+			statement.execute();
+
+			// Second, update categories table for each category.
+			sql = "INSERT IGNORE INTO categories VALUES (?,?)";
+			for (String category : item.getCategories()) {
+				statement = conn.prepareStatement(sql);
+				statement.setString(1, item.getItemId());
+				statement.setString(2, category);
+				statement.execute();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public String getFullname(String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean verifyLogin(String userId, String password) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+}
