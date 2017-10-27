@@ -181,15 +181,24 @@ public class TicketMasterAPI implements ExternalAPI{
 
 	    // Get first image url from an event object
 		private String getImageUrl(JSONObject event) throws JSONException {
-			if (!event.isNull("_embedded")) {
+			/*if (!event.isNull("_embedded")) {
 				String url = event.getString("url");
 				return url;
 			}
+			return null;*/
+			if (!event.isNull("images")) {
+				JSONArray imagesArray = event.getJSONArray("images");
+				if (imagesArray.length() >= 1) {
+					return getStringFieldOrNull(imagesArray.getJSONObject(0), "url" );
+				}
+			}
 			return null;
+
 		}
 
 		private Set<String> getCategories(JSONObject event) throws JSONException {
 			Set<String> categories = new HashSet<>();
+			/*
 			JSONArray classifications = (JSONArray) event.get("classifications");
 			//System.out.println(classifications);
 			//because classification just a item array with dictonary with key primary, segment, genre, and son on
@@ -198,7 +207,16 @@ public class TicketMasterAPI implements ExternalAPI{
 			JSONObject segment = ((JSONObject) classifications.get(0)).getJSONObject("segment");
 			//System.out.println(segment);
 			String category = (String) segment.get("name");
-			categories.add(category);
+			categories.add(category);*/
+			//JsonArray is a array of JsonObject
+			if (!event.isNull("classifications")) {
+					JSONArray classifications = (JSONArray) event.get("classifications");
+					for (int j = 0; j < classifications.length(); j++) {
+						JSONObject classification = classifications.getJSONObject(j);
+						JSONObject segment = classification.getJSONObject("segment");
+						categories.add(segment.getString("name"));
+					}
+				}
 			return categories;
 		}
 
