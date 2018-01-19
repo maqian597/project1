@@ -98,7 +98,7 @@ public class TicketMasterAPI implements ExternalAPI{
 		try {
 			for (Item iterm : itermList) {
 				JSONObject jsonObject = iterm.toJSONObject();
-				System.out.println(jsonObject);
+				//System.out.println(jsonObject);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

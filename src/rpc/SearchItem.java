@@ -128,7 +128,7 @@ public class SearchItem extends HttpServlet {
 		DBConnection conn = DBConnectionFactory.getDBConnection(); //this is where the fatory used in code
 		List<Item> items = conn.searchItems(userId, lat, lon, term);
 		List<JSONObject> list = new ArrayList<>();
-
+		Set<JSONObject> removeDup = new HashSet<>();
 		Set<String> favorite = conn.getFavoriteItemIds(userId);
 		try {
 			for (Item item : items) {
@@ -136,7 +136,10 @@ public class SearchItem extends HttpServlet {
 				if (favorite != null) {
 					obj.put("favorite", favorite.contains(item.getItemId()));
 				}
-				list.add(obj);
+				if (!removeDup.contains(obj)) {
+					list.add(obj);
+					removeDup.add(obj);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
