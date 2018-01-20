@@ -117,11 +117,11 @@ public class MySQLConnection implements DBConnection{
 				PreparedStatement statement = conn.prepareStatement(sql);
 				statement.setString(1, itemId);
 				ResultSet rs = statement.executeQuery();
+				//using builder to create the item.
 				ItemBuilder builder = new ItemBuilder();
-
-				// Because itemId is unique and given one item id there should
-				// have only one result returned.
+				// Because itemId is unique and given one item id there should have only one result returned.
 				if (rs.next()) {
+					//this is the builder design pattern
 					builder.setItemId(rs.getString("item_id"));
 					builder.setName(rs.getString("name"));
 					builder.setCity(rs.getString("city"));
@@ -139,9 +139,9 @@ public class MySQLConnection implements DBConnection{
 					builder.setUrl(rs.getString("url"));
 				}
 
-				Set<String> categories = getCategories(itemId);
+				Set<String> categories = getCategories(itemId);  //this need to setup the category of the item.
 				builder.setCategories(categories);
-				favoriteItems.add(builder.build());
+				favoriteItems.add(builder.build());  //pay attention to builder.build
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -157,8 +157,8 @@ public class MySQLConnection implements DBConnection{
 		}
 		Set<String> categories = new HashSet<>();
 		try {
-			String sql = "SELECT category from categories WHERE item_id = ? ";
-			PreparedStatement statement = conn.prepareStatement(sql);
+			String query = "SELECT category from categories WHERE item_id = ? ";
+			PreparedStatement statement = conn.prepareStatement(query);
 			statement.setString(1, itemId);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {

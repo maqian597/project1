@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -120,7 +121,16 @@ public class SearchItem extends HttpServlet {
     //new updated doGet() function
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String userId = request.getParameter("user_id");
+    		// allow access only if session exists
+		HttpSession session = request.getSession();
+		String user = (String) session.getAttribute("user_id");
+		String user_id = request.getParameter("user_id");
+		if (user == null || !user.equals(user_id)) {
+			response.setStatus(403);
+			return;
+		}
+    	
+    		String userId = request.getParameter("user_id");
 		double lat = Double.parseDouble(request.getParameter("lat"));
 		double lon = Double.parseDouble(request.getParameter("lon"));
 		String term = request.getParameter("term"); // Term can be empty or null.
@@ -128,7 +138,7 @@ public class SearchItem extends HttpServlet {
 		DBConnection conn = DBConnectionFactory.getDBConnection(); //this is where the fatory used in code
 		List<Item> items = conn.searchItems(userId, lat, lon, term);
 		List<JSONObject> list = new ArrayList<>();
-
+		Set<JSONObject> removeDup = new HashSet<>();
 		Set<String> favorite = conn.getFavoriteItemIds(userId);
 		try {
 			for (Item item : items) {
@@ -136,7 +146,10 @@ public class SearchItem extends HttpServlet {
 				if (favorite != null) {
 					obj.put("favorite", favorite.contains(item.getItemId()));
 				}
-				list.add(obj);
+				if (!removeDup.contains(obj)) {
+					list.add(obj);
+					removeDup.add(obj);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

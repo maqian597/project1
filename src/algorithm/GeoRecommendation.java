@@ -9,28 +9,28 @@ public class GeoRecommendation {
 	public List<Item> recommendItems(String userId, double lat, double lon) {
 		DBConnection conn = DBConnectionFactory.getDBConnection();
 
-		// step 1  // db queries
+		// step 1 db queries
 		Set<String> favoriteItems = conn.getFavoriteItemIds(userId); 
-		//step 2
+		//step 2 get all possible categories especially Undefined.
 		Set<String> allCategories = new HashSet<>(); 
 		for (String item : favoriteItems) {
 			allCategories.addAll(conn.getCategories(item)); //db queries
-			}
-		   // tune category set
+		}
+		//remove undefined category, that's the item has no classifiers.
 		allCategories.remove("Undefined"); 
 		if (allCategories.isEmpty()) {
 			allCategories.add("");
 		}
-		//step 3
+		//step 3 search for all possible items.
 		Set<Item> recommendedItems = new HashSet<>(); 
 		for (String category : allCategories) {
 			List<Item> items = conn.searchItems(userId, lat, lon, category); // call external API
 			recommendedItems.addAll(items);
 		}
 
-		// Student question: why we use list now instead of set?
-		// Answer: because we will have ranking now.
-		List<Item> filteredItems = new ArrayList<>();  // step 4
+		// why we use list now instead of set? because we will have ranking now.
+		// step 4 
+		List<Item> filteredItems = new ArrayList<>();  
 		for (Item item : recommendedItems) {
 			if (!favoriteItems.contains(item.getItemId())) {
 				filteredItems.add(item);
@@ -41,9 +41,7 @@ public class GeoRecommendation {
 		Collections.sort(filteredItems, new Comparator<Item>() {
 		@Override
 		public int compare(Item item1, Item item2) {
-			// Student question: can we make this ranking even better with
-			// more dimensions?
-			// What other feathers can be used here?
+			// We can improved the rank calculator here.
 			double distance1 = getDistance(item1.getLatitude(), item1.getLongitude(), lat, lon);
 			double distance2 = getDistance(item2.getLatitude(), item2.getLongitude(), lat, lon);
 			// return the increasing order of distance.

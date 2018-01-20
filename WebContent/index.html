@@ -1,33 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
- <meta charset="UTF-8">
- <meta name="description" content="Item Recommendation">
- <meta name="author" content="Your Name">
- <title>Item Recommendation</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Item Recommendation">
+	<meta name="author" content="qian ma (Elina)">
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="styles/main.css">
+	<title>Item Recommendation</title>
 </head>
 
 
 <body>
   <header class="top-header">
     <nav class="top-nav">
-     <a href="#">Home</a>
-     <a href="#">Contact</a>
-     <a href="#">About</a>
-   </nav>
+<a href="#" id="home-btn">Home</a>
+<a href="#" id="contact-btn">Contact</a>
+<a href="#" id="about-btn">About</a>
+</nav>
+   <nav class="top-right-nav">
+    <!--<a href="#" id="login-btn">LogIn</a>-->
+     <span id="welcomeMsg"></span>
+     <a href="logout" id="logout-link">LogOut</a>
+     <!--<i class="fa fa-user fa-2x" id="usericon"></i>-->
+     <!--<img id="usericon" src="https://png.icons8.com/office/40/000000/accessibility2.png">-->
+   </nav>
   </header>
-  
-  <div class="container">
+ 
+  <div class="container" id="sidebar_item">
     <header>
       <p>
-       <span>Item</span>
-       <br/> Recommendation
-     </p>
+    <span>Ticket</span>
+    <br>
+    <br> <span>Recommendation</span>
+    </p>
 
     </header>
-      
-    <section class="main-section">
-     
+
+   <!-- this is the main-section, show if the user login, hidden if no session or logout -->  
+    <section class="main-section" id="sidebaritem">
       <aside id="item-nav">
        <div class="nav-icon">
          <i class="fa fa-sitemap fa-2x"></i>
@@ -49,7 +60,7 @@
        <li class="item">
          <img alt="item image" src="https://s3-media3.fl.yelpcdn.com/bphoto/EmBj4qlyQaGd9Q4oXEhEeQ/ms.jpg" />
          <div>
-           <a class="item-name" href="#">Item</a>
+           <a class="item-name" href="#">{item_name}</a>
            <p class="item-category">Vegetarian</p>
            <div class="stars">
              <i class="fa fa-star"></i>
@@ -63,29 +74,47 @@
          </div>
        </li>
      </ul>
-    
     </section>
-    
-  </div>
+        <!-- this section is showed if user not login or no session -->
+    <div class="form" id="login_form">
+		<p class="header login-error">
+		  Log In
+		</p>
+        <br>
+		<div class="form" id="content">
+		    <form method="post" id = "submission">
+		    <p class="label">UserName(UserId):</p>
+		    <p><input type="text" name="username" id="user_id" class="formcommon"> </p>
+		    <p class="label">Password:</p>
+		    <p><input type="password" name="password" id="password" class="formcommon"> </p>
+		    </form>
+		<button type="submit" id="login_submit">Login</button>
+		</div>
+    </div>
+
   
+  </div>
   <footer>
-   <p class="title">What We Do</p>
-   <p>"Help you find the best place around."</p>
-   <ul>
+   <p class="title">What Can We Do For You</p>
+    <br>
+<p>Help you find the best events around and get tickets for them.</p>
+<ul>
 	<li>
-       <p><i class="fa fa-map-o fa-2x"></i></p>
-       <p>LaiOffer office, CA</p>
-     </li>
+<p><img src="https://png.icons8.com/ultraviolet/35/000000/map-marker.png"></p>
+<p>Ann Arbor, MI 48105</p>
+</li>
 	<li>
-       <p><i class="fa fa-envelope-o fa-2x"></i></p>
-       <p>info@laioffer.com</p>
-     </li>
+<p><img src="https://png.icons8.com/ultraviolet/40/000000/send-mass-email.png"></p>
+<p>info@xxxxx.com</p>
+</li>
 	<li>
-       <p><i class="fa fa-phone fa-2x"></i></p>
-       <p>+1 800 123 456</p>
-     </li>
+<p><img src="https://png.icons8.com/ultraviolet/30/000000/phone.png"></p>
+<p>+1 xxx xxx xxxx</p>
+</li>
    </ul>
 
   </footer>
+  <script src="scripts/md5.min.js"></script>
+  <script src="scripts/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,322 @@
+* {
+  box-sizing: border-box;
+  margin:     0;
+  padding:    0;
+}
+
+body {
+  background:  #ffffff;
+  color:       #000000;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size:   0.9em;
+}
+
+ul {
+  list-style: none;
+}
+
+/**
+ * top header
+ */
+.top-header {
+  position:    fixed;
+  align-items: center;
+  background:  #6dc2ff; //#DF574B;
+  //background: url('http://bpic.wotucdn.com/16/34/14/16341431-3abbb885ec55b4d7fd37f2ac2f706f44-0.jpg');
+  //background:  url('http://img.jituwang.com/uploads/allimg/151207/258055-15120G0205442.jpg');
+  box-shadow:  0px 2px 10px #333333;
+  display:     flex;
+  height:      60px;
+  top:         0;
+  width:       100%;
+  background-size: 80px;
+}
+
+/**
+ * top navigation
+ */
+.top-nav {
+  flex: 1;
+}
+
+.top-nav a {
+  color:           #F9F9F9;
+  font-weight:     400;
+  margin-left:     20px;
+  text-decoration: none;
+}
+/**
+ * top right login/logout navigation
+ */
+.top-right-nav {
+  flex: ;
+}
+.top-right-nav a {
+  color:           #F9F9F9;
+  font-weight:     400;
+  padding-left:  10px;
+  width:         20px;
+  margin-right:   20px;
+  text-decoration: none;
+}
+
+#welcomeMsg {
+  border-right:  1px solid #F9F9F9;
+  padding-right: 10px;
+  color:           #F9F9F9;
+  font-weight:     400;
+  margin-right:     20px;
+  text-decoration: none;
+}
+
+#usericon {
+  //background:    #FFFFFF;
+  border-radius: 50%;
+  color:         #333C4D;
+  height:        30px;
+  margin-right:  10px;
+  padding-left:  10px;
+  padding-top:   3px;
+  width:         40px;
+}
+/**
+ * main container
+ */
+.container {
+  margin:    60px auto;
+  max-width: 1000px;
+  min-width: 600px;
+}
+
+/**
+ * main header
+ */
+.container > header {
+  align-items:     center;
+  background: url('http://img01.taopic.com/160522/240467-16052211150448.jpg');
+  //background: url('http://www.logodashi.com/FileUpload/images/636310431691765449.jpeg'); no-repeat 50% 50%;
+  //background:     url('https://www.istockphoto.com/resources/images/PhotoFTLP/img_63351521.jpg');
+  //url('https://prophoto.com.cy/wp-content/galleries/property-photography-gallery/cyprus-hotel-resort-photographer-17.jpg');
+  background-size: 100%;
+  display:         flex;
+  height:          300px;
+}
+
+.container > header p {
+  border-left:  1px solid #FFFFFF;
+  font-weight:  400;
+  font-size:    2em;
+  line-height:  1em;
+  margin-left:  200px;
+  padding-left: 5px;
+}
+
+.container > header span {
+  color: #ffffff;//#FBAF41;
+}
+
+/**
+ * main section
+ */
+.main-section {
+  background: #99ccff;//#F3BB43;
+}
+
+/**
+ * aside
+ */
+#item-nav {
+  display: block;
+  float: left;
+  width: 180px;
+}
+
+.nav-icon {
+  color:      #232aa3;//#624630;
+  padding:    20px;
+  text-align: center;
+}
+
+/**
+ * main navigation
+ */
+.main-nav-btn {
+  background:      none;
+  border-top:      1px solid #FFFFFF;
+  color:           #FFFFFF;
+  display:         block;
+  padding:         20px;
+  text-align:      left;
+  text-decoration: none;
+}
+
+.main-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color:      #232aa3;//#624630;
+}
+
+.main-nav-btn.active {
+  background: #ffffff;//#F2EBD9;
+  color:      #624630;
+}
+
+.main-nav-btn i {
+  width: 20px;
+}
+
+/**
+ * item list
+ */
+#item-list {
+  background:  #ffffff;//#F2EBD9;
+  color:       #232aa3;//#624630;
+  display:     block;
+  list-style:  none;
+  margin-left: 180px;
+  min-height:  250px;
+  padding:     10px;
+}
+
+#item-list .notice {
+  font-size:  16px;
+  padding:    60px;
+  text-align: center;
+}
+
+/**
+ * item
+ */
+.item {
+  align-items:   center;
+  border-bottom: 1px solid #FFFFFF;
+  display:       flex;
+  margin:        10px;
+  padding:       15px;
+}
+
+.item:last-child {
+  border: none;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.item img {
+  border: 1px solid #FFFFFF;
+  height: 80px;
+  width:  80px;
+}
+
+.item > div:first-of-type {
+  flex:         1;
+  margin-left:  10px;
+  margin-right: 10px;
+}
+
+.item-name {
+  color:           #232aa3;//#624630;
+  font-weight:     400;
+  text-decoration: none;
+}
+
+.item-name:hover {
+  text-decoration: underline;
+}
+
+.item-address {
+  line-height:   20px;
+  padding-right: 20px;
+  text-align:    right;
+}
+
+.stars {
+  align-items: center;
+  display:     flex;
+  padding-top: 10px;
+}
+
+.fav-link {
+  border-left: 1px solid #FFFFFF;
+  cursor:      pointer;
+  line-height: 60px;
+  text-align:  center;
+  width:       60px;
+}
+
+.fav-link:hover {
+  color: #F13F3F;
+}
+
+/** login-form
+ *
+ */
+#login_form {
+  color: #99ccff;
+  margin: 0px auto;
+  overflow: auto;
+  padding: 30px;
+  width: 400px;
+}
+
+.formcommon {
+  //border: none;
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+}
+.header {
+  color: #99ccff;
+  font-size:    2em;
+  font-weight:     500;
+  text-decoration: none;
+}
+
+.label {
+  color: #99ccff;
+  font-weight:     400;
+  text-decoration: none;
+}
+#login_submit {
+  cursor:       pointer;
+  color:        #99ccff;
+  font-weight:  400;
+  float:        right;
+  padding:      8px 20px;
+  text-align:   right;
+}
+
+#login-error {
+  clear: both;
+  color: #990000;
+  padding-top: 10px;
+}
+/**
+ * footer section
+ */
+footer {
+  background: #ffffff;
+  font-size:  1em;
+  height:     200px;
+  position:   relative;
+}
+
+footer p {
+  text-align: center;
+}
+
+footer p.title {
+  font-size: 1.5em;
+  padding:   0px;
+}
+
+footer ul {
+  align-items: center;
+  display:     flex;
+  padding:     50px;
+}
+
+footer ul li {
+  flex: 3;
+}
