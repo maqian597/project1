@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +65,15 @@ public class RecommendItem extends HttpServlet {
 		out.flush();
 		out.close();*/
 		String userId = request.getParameter("user_id");
+		
+		//allow access only if session exists
+		HttpSession session = request.getSession();
+		String user = (String) session.getAttribute("user_id");
+		if (user == null || !user.equals(userId)) {
+			response.setStatus(403);
+			return;
+		}
+		
 		double lat = Double.parseDouble(request.getParameter("lat"));
 		double lon = Double.parseDouble(request.getParameter("lon"));
 		GeoRecommendation recommendation = new GeoRecommendation();

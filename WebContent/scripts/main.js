@@ -11,15 +11,17 @@
 	 * Initialize
 	 */
 	function init() {
+		validateSession();
+		
 //		// Register event listeners
-		$('login-btn').addEventListener('click', loadUser);
+		$('login_submit').addEventListener('click', logIn);
 		$('nearby-btn').addEventListener('click', loadNearbyItems);
 		$('fav-btn').addEventListener('click', loadFavoriteItems);
 		$('recommend-btn').addEventListener('click', loadRecommendedItems);
 		initGeoLocation();
 		
 		//onSessionValid({'user_id': 1111, 'name': 'John Smith'});
-		onSessionInvalid();	
+		//onSessionInvalid();	
 		//checkLogIn();
 	}
 
@@ -64,33 +66,6 @@
 		});					
 	}
 	
-	//this is check session or login function
-	function checkLogIn() {
-		// The request parameters
-		var url = './login';
-		var req = JSON.stringify({});
-		ajax('GET', url, req, function(res) {
-			var result = JSON.parse(res);
-			// Register event listeners
-			console.log(res)
-			var side = $('#sidebar_item');
-			side.innerHTML ='';
-			$('#logout_btn').hide();
-			$('nearby-btn').addEventListener('click', loadNearbyItems);
-			$('fav-btn').addEventListener('click', loadFavoriteItems);
-			$('recommend-btn').addEventListener('click', loadRecommendedItems);
-			initGeoLocation();
-		},
-		// failed callback
-		function() {
-			showErrorMessage('Cannot load nearby items.');
-		});
-	}
-	
-	//this is for the session valid;
-	function onSessionValid() {
-		
-	}
 	// -----------------------------------
 	// Helper Functions
 	// -----------------------------------
@@ -155,6 +130,7 @@
 		return element;
 	}
 
+	
 	/**
 	 * AJAX helper
 	 * 
@@ -199,14 +175,53 @@
 			xhr.send(data);
 		}
 	}
+	function validateSession() {
+		var url = './login';
+		var req = JSON.stringify({});
+		showLoadingMessage("Validating session.....");
+		ajax('GET', url, req, function(res){
+			var result = JSON.parse(res);
+			if (result.status == 'OK') {
+				onSessionValid(result);
+			}
+		});
+	}
 	function onSessionInvalid() {
 		console.log("session invalid, so go to the log in form")
-		var login_form = $('login_form')
-		var eventRecom = $('sidebaritem')
+		var login_form = $('login_form');
+		var eventRecom = $('sidebaritem');
+		var Msg = $('welcomeMsg');
+		var logout = $('logout-link');
+
+		//hidden what, eventblock, logout-link, welcomMsg
+		//show login form, 
 		login_form.style.display = 'block';
 		eventRecom.style.display = 'none';
+		Msg.style.display = 'none';
+		logout.style.display = 'none';
 	}
+	
+	//this is for the session valid;
+	function onSessionValid(result) {
+		user_id = result.user_id;
+		name = result.full_name;
+		var logForm = $('login_form');
+		var eventRecom = $('sidebaritem');
+		var logout = $('logout-link');
+		var Msg = $('welcomeMsg');
 
+		Msg.innerHTML = 'Welcome ' + name;
+		eventRecom.style.display = 'block';
+		Msg.style.display = 'block';
+		logout.style.display = 'block';
+		
+		//then need refresh nearby btn to get display;
+		loadNearbyItems();
+		
+		logForm.style.display = 'none';
+		
+		
+	}
 	// -------------------------------------
 	// AJAX call server-side APIs
 	// -------------------------------------
@@ -344,29 +359,35 @@
 	/*
 	 * API #5 Login/Logout in Recommendation.
 	 * /Titan/login
-	 * /Titan/logout
 	 */
-	function loadUser(){
-		activeBtn('fav-btn');
-
+	function logIn(){
+		
 		// The request url parameters
 		var url = './login';
+		var user_id = $('user_id').value;
+		var password = $('password').value;
+		var pwd = md5(user_id + md5(password));
+		
+		var params = '?user_id=' + user_id + '&password=' + pwd; 
 		var req = JSON.stringify({});
 
 		// display loading message
 		showLoadingMessage('Loading login html...');
 
 		//create the form to log in 
-		var side = $('sidebar_item');
-		var string = '<section class= "main-section" id="login_form"><p class="center">This is the login page</p><div id="content"><form method="post" id = "submission"><p>UserName/UserId:<input type="text" name="username" id="user_id"> </p><p>Password:<input type="password" name="password" id="pwd"> </p></form><button type="submit" id="login_submit">Login</button></div></section>';
 		// make AJAX call
-		ajax('GET', url, req, 
+		ajax('POST', url+params, req, 
 		function(res) {
-			var items = JSON.parse(res);
-			side.innerHTML = string;
-			showLoadingMessage(items);
+			var result = JSON.parse(res);
+			console.log(result);
+			if (result.status == 'OK') {
+				onSessionValid(result);
+			} else {
+				onSessionInValid();
+			}
+			showLoadingMessage(result);
 		}, function() {
-			showErrorMessage('Cannot load login html.');
+			showErrorMessage('Cannot login');
 		}); 
 	}
 	// -------------------------------------

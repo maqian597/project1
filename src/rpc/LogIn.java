@@ -79,6 +79,7 @@ public class LogIn extends HttpServlet {
 				msg.put("status", "OK");
 				msg.put("user_id", userId);
 				msg.put("full_name", name);
+				System.out.println(msg);
 			} else {
 				response.setStatus(401);
 			}

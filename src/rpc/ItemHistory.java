@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +44,14 @@ public class ItemHistory extends HttpServlet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		String userId = request.getParameter("user_id");
 		JSONArray array = new JSONArray();
-
+		//allow access only if session exists
+		HttpSession session = request.getSession();
+		String user = (String) session.getAttribute("user_id");
+		if (user == null || !user.equals(userId)) {
+			response.setStatus(403);
+			return;
+		}
+		
 		DBConnection conn = DBConnectionFactory.getDBConnection();
 		Set<Item> items = conn.getFavoriteItems(userId);
 		for (Item item : items) {
